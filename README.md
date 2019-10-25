@@ -1,0 +1,2 @@
+# lambda_trigger_function_repo
+lamda is serverless applications and function wrapper can trigger any resource and execute the function when event triggered by the target resource also may help us to code on c++,python,node js and more, contains vast number of uses on ec2 instances start and stop by schedule events and fetch file from resource to resource .It is capable to wrap the complete with function on assigned role 
