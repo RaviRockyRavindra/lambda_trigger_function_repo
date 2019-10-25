@@ -1,0 +1,64 @@
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Oct 26 00:00:40 2019
+
+@author: Ravindra sai konna
+
+
+"""
+
+# make sure created role with s3, cloudwatch, dynamodb
+# fucntion for moving the json object to dynamo db from s3 bucket Aws
+
+import json
+import boto3 as butteee
+import urllib
+
+
+def rocky_handler(event, context):
+    
+    client_s3=butteee.client('s3')
+    
+    resource_dynamodb=butteee.resource('dynamodb')
+    
+    # intializing resources of s3 and dynamodb to the variables 
+    
+    #now take the event data and get all necessary information
+    
+    bucket_name=event['Records'][0]['s3']['bucket']['name']
+    
+    file_name=event['Records'][0]['s3']['object']['key']
+
+    # we have bucketname and filename by using boto3 sdk we can use "s3.get_object(Bucket,key)" in order to get the object
+    #and pull the file from the bucket 
+    
+    getfile_from_bucket=client_s3.get_object(Bucket=bucket_name,Key=file_name)
+    
+    #getfile_from_bucket contains the streaming body make it read()
+    
+    object_file=getfile_from_bucket['Body'].read()
+    
+    # now load with json.loads()
+
+    final_json_item=json.loads(object_file)
+
+    #now intiating the dynamodb table and put the item in specific table 
+    
+    
+    
+    try:
+      
+        dynamotable= resource_dynamodb.Table('rocky')
+        dynamotable.put_item(Item=final_json_item)
+        
+    except:
+        print("some thing gonna wrong with table name")
+        
+        
+    return "Successfully uploaded to table"    
+    
+    
+ # enjoy lambda service--------------   
+    
